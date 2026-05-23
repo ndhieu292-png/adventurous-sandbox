@@ -1,22 +1,24 @@
 balance = 1000
 def withdraw(balance, b):
                 return balance - b
-def add(balance, b):
+def deposit(balance, b):
                 return balance + b
+def check_balance(balance):
+      print(balance)
+menu = ["1. Check Balance", "2. Deposit", "3. Withdraw", "4. Exit"]
 while True:
-    menu = ["1. Check Balance", "2. Deposit", "3. Withdraw", "4. Exit"]
     for task in menu:
         print(task)
     choice = input("Choose option: ")
     if choice == "2":
         while True:
-            b = int(input("Enter amount, 0 for quit: "))
-            if b == 0:
+            a = int(input("Enter amount, 0 for quit: "))
+            if a == 0:
                 break
-            balance = add(balance, b)
-    if choice == "1":
-        print(balance)
-    if choice == "3":
+            balance = deposit(balance, a)
+    elif choice == "1":
+        check_balance(balance)
+    elif choice == "3":
         while True:
             b = int(input("Enter amount, 0 for quit: "))
             if b == 0:
@@ -25,5 +27,5 @@ while True:
                 print("Invalid")
             elif b <= balance:
                 balance = withdraw(balance, b)
-    if choice == "4":
+    elif choice == "4":
         break
