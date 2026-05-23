@@ -1,8 +1,9 @@
 tasks = []
 def add_task(task):
     tasks.append(task)
-def remove_task(task):
-    tasks.remove(task)
+def remove_task(tasks):
+    index = int(input("Nhap so: "))
+    tasks.pop(index - 1)
 def show_task():
     for index, task in enumerate(tasks):
         print(index + 1, task)
@@ -21,13 +22,13 @@ while True:
         show_task()
     elif choice == "3":
         while True:
-            task = input("Remove task, q for quit: ")
-            if task == "q":
+            index = int(input("Remove task, 0 for quit: "))
+            if index == 0:
                 break
             elif len(tasks) == 0:
                 print("Empty tasks")
-            elif task in tasks:
-                remove_task(task)
+            elif 0 < index <= len(tasks):
+                remove_task(tasks)
             else:
                 print("Invalid")
     elif choice == "4":
