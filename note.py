@@ -31,8 +31,8 @@ while True:
             if len(notes) == 0:
                 print("Empty notes")
                 break
-            index = int(input("Enter number, q for quit: "))
-            if index == "q":
+            index = int(input("Enter number, 0 for quit: "))
+            if index == 0:
                 break
             elif 0 < index <= len(notes):
                 remove_notes(index)
@@ -41,7 +41,7 @@ while True:
     elif choice == "4":
         search = input("Keyword: ")
         found = False
-        for index, note in notes:    
+        for index, note in enumerate(notes):    
             if search in note["title"] or search in note["content"]:
                 found = True
                 print(index + 1)
