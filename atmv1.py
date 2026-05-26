@@ -43,7 +43,7 @@ while True:
                 if password == account["password"]:
                     print("Success")
                     while True:
-                        menu = ["1. Deposit", "2. Withdraw", "3. Transfer"]
+                        menu = ["1. Deposit", "2. Withdraw", "3. Transfer", "4. Exit"]
                         for item in menu:
                             print(item)
                         choice = input("Choose your option: ")
@@ -76,7 +76,8 @@ while True:
                                         break
                                 if receiver_found == False:
                                     print("Receiver not found")
-                    break          
+                        elif choice == "4":
+                            break         
                 else:
                     print("Wrong password")
         if account_found == False:
