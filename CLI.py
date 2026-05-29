@@ -7,7 +7,7 @@ def user_system():
         choice = input("Enter option: ")
         if choice == "1":
             username = input("Your username: ")
-            password = input("your username: ")
+            password = input("your password: ")
             user = {"username": username, "password": password, "cart":  [], "history": []}
             users.append(user)
             print("Success")
@@ -119,7 +119,7 @@ def cart_system():
             while True:
                 for product in products:
                     print(product)
-                option = input("1. Add cart", "2. Done")
+                option = input("1. Add cart\n2. Done\n")
                 if option == "1":
                     add_cart()
                 elif option == "2":
@@ -155,18 +155,26 @@ def cart_system():
         elif cart_choice == "q":
             break
 def checkout():
+    order_items = []
     for itemcart in user["cart"]:
         for item in products:
             if itemcart["product_id"] == item["id"]:
-                quantity = itemcart["quantity"]
-                if quantity <= item["stock"]:
-                    item["stock"] -= quantity
-                    return True
-                else:
-                    print("Insufficient stock, please change your cart quantity!")
+                if itemcart["quantity"] > item["stock"]:
+                    print("Insufficient stock")
                     return False
-    if True:
-        user["cart"].clear()
+    total = 0
+    for itemcart in user["cart"]:
+        for item in products:
+            if itemcart["product_id"] == item["id"]:
+                if itemcart["quantity"] <= item ["stock"]:
+                    item["stock"] -= itemcart["quantity"]
+                    order_items.append({"id": item['id'], "qty": itemcart['quantity'], "price": item['price']})
+                    qty = itemcart['quantity']
+                    total += qty * item['price']
+    order = {"items": order_items, "total": total}
+    user["history"].append(order)
+    user["cart"].clear()
+    return True
 def user_menu():
     user_menu = ["1. Search", "2. Cart system", "3. View cart", "4. Checkout", "5. Log out"]
     while True:
@@ -192,29 +200,32 @@ def user_menu():
         else:
             print("Invalid")
                 
-choice = input("Choose your role 1. admin 2. user: ")
-if choice == "1":
-    menu = ["1. Add product", "2. Search product", "3. Stock management"]
-    while True:
-        for item in menu:
-            print(item)
-        choice = input("Choose your option: ")
-        if choice == "1":
-            create_product()
-        elif choice == "2":
-            keyword = input("Enter name or id product: ")
-            search_product(keyword)
-        elif choice == "3":
-            productname = input("Enter name or id product: ")
-            found = False
-            for item in products:
-                if productname == item["id"] or productname == item["name"]:
-                    found = True
-                    stock_management(item)
-            if found == False:
+while True:
+    choice = input("Choose your role 1. admin 2. user: ")
+    if choice == "1":
+        menu = ["1. Add product", "2. Search product", "3. Stock management", "4. Exit"]
+        while True:
+            for item in menu:
+                print(item)
+            choice = input("Choose your option: ")
+            if choice == "1":
+                create_product()
+            elif choice == "2":
+                keyword = input("Enter name or id product: ")
+                search_product(keyword)
+            elif choice == "3":
+                productname = input("Enter name or id product: ")
+                found = False
+                for item in products:
+                    if productname == item["id"] or productname == item["name"]:
+                        found = True
+                        stock_management(item)
+                if found == False:
+                    break
+            elif choice == "4":
                 break
-if choice == "2":
-    user_system()
+    if choice == "2":
+        user_system()
 
                     
 
