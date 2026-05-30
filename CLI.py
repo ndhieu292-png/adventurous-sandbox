@@ -90,12 +90,12 @@ def product_menu():
             break
         else:
             print("Invalid")
-def add_cart():
+def add_cart(user):
     product_id = input("Choose id product: ")
     quantity = int(input("Enter quantity: "))
     cart = {"product_id": product_id, "quantity": quantity}
     user["cart"].append(cart)
-def remove_cart(id_cart):
+def remove_cart(id_cart, user):
     while True:
         found = False
         for cart in user["cart"]:
@@ -109,7 +109,7 @@ def quantity_cart(itemcart):
     new_quantity = int(input("Enter new quantity: "))
     itemcart["quantity"] = new_quantity
     print("Quantity cart updated!")
-def cart_system():
+def cart_system(user):
     menu_cart = ["1. Add to cart", "2. Remove from cart", "3. Change quantity"]
     while True:
         for item in menu_cart:
@@ -154,7 +154,7 @@ def cart_system():
                     print("Invalid")
         elif cart_choice == "q":
             break
-def checkout():
+def checkout(user):
     order_items = []
     for itemcart in user["cart"]:
         for item in products:
@@ -175,7 +175,7 @@ def checkout():
     user["history"].append(order)
     user["cart"].clear()
     return True
-def user_menu():
+def user_menu(user):
     user_menu = ["1. Search", "2. Cart system", "3. View cart", "4. Checkout", "5. Log out"]
     while True:
         for item in user_menu:
