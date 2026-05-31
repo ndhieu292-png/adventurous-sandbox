@@ -54,7 +54,7 @@ def search_product(keyword):
             matches.append(product)
     return matches
 def product_menu():
-    menu = ["1. Add product", "2. Show lists", "3. Search", "4. Stock management", "5. Exit"]
+    menu = ["1. Add product", "2. Show lists", "3. Search", "4. Stock management", "5. Exit", "6. Delete product"]
     for task in menu:
         print(task)
     while True:
@@ -88,12 +88,34 @@ def product_menu():
                     break
         elif option == "5":
             break
+        elif option == "6":
+            delete_product
         else:
+            print("Invalid")
+def delete_product():
+    while True:
+        for item in products:
+            print(item)
+        del_item = input("Enter id or name of product, q for quit: ")
+        if del_item == "q":
+            break
+        found = False
+        for item in products:
+            if del_item == item["id"] or del_item == item["name"]:
+                found = True
+                products.remove(item)
+                print("deleted")
+                break
+        if found == False:
             print("Invalid")
 def add_cart(user):
     product_id = input("Choose id product: ")
     quantity = int(input("Enter quantity: "))
     cart = {"product_id": product_id, "quantity": quantity}
+    for item in user["cart"]:
+        if product_id == item["product_id"]:
+            item["quantity"] += quantity
+            return
     user["cart"].append(cart)
 def remove_cart(id_cart, user):
     while True:
@@ -121,7 +143,7 @@ def cart_system(user):
                     print(product)
                 option = input("1. Add cart\n2. Done\n")
                 if option == "1":
-                    add_cart()
+                    add_cart(user)
                 elif option == "2":
                     break
         elif cart_choice == "2":
@@ -176,7 +198,7 @@ def checkout(user):
     user["cart"].clear()
     return True
 def user_menu(user):
-    user_menu = ["1. Search", "2. Cart system", "3. View cart", "4. Checkout", "5. Log out"]
+    user_menu = ["1. Search", "2. Cart system", "3. View cart", "4. Checkout", "5. Log out", "6. View history"]
     while True:
         for item in user_menu:
             print(item)
@@ -189,14 +211,17 @@ def user_menu(user):
             for item in matches:
                 print(item)
         elif choice == "2":
-            cart_system()
+            cart_system(user)
         elif choice == "3":
             for itemcart in user["cart"]:
                 print(itemcart)
         elif choice == "4":
-            checkout()
+            checkout(user)
         elif choice == "5":
             break
+        elif choice == "6":
+            for item in user["history"]:
+                print(item)
         else:
             print("Invalid")
                 
