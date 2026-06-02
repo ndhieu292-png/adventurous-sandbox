@@ -1,4 +1,21 @@
-users = []
+import json
+def load_products():
+    with open("products.json", "r") as file:
+        products = json.load(file)
+    print("Loaded", products)
+    return products
+def save_products(products):
+    with open("products.json", "w") as file:
+        json.dump(products, file)
+def load_user():
+    with open("usersystem.json", "r") as file:
+        users = json.load(file)
+    print("Loaded:", users)
+    return users
+def save_user(users):
+    with open("usersystem.json", "w") as file:
+        json.dump(users, file)
+users = load_user()
 def user_system():
     menu = ["1. Register", "2. Login", "3. Exit"]
     for task in menu:
@@ -10,6 +27,7 @@ def user_system():
             password = input("your password: ")
             user = {"username": username, "password": password, "cart":  [], "history": []}
             users.append(user)
+            save_user(users)
             print("Success")
         elif choice == "2":
             login_username = input("Your username: ")
@@ -23,7 +41,7 @@ def user_system():
                             break
                         elif login_password == user["password"]:
                             print("Success")
-                            user_menu()
+                            user_menu(user)
                         else:
                             print("Fail")
                             break
@@ -34,7 +52,7 @@ def user_system():
             break
         else:
             print("Invalid")
-products = []
+products = load_products()
 def create_product():
     product_id = input("Your product id: ")
     name = input("Your product:")
@@ -42,10 +60,12 @@ def create_product():
     stock = int(input("Enter stock: "))
     new_product = {"id": product_id,"name": name,"price": price,"stock": stock}
     products.append(new_product)
+    save_products(products)
 def stock_management(item):
     print(f"Current stock: {item['stock']}")
     new_stock = int(input("Enter new stock: "))
     item["stock"] = new_stock
+    save_products(products)
     print("Stock updated!")
 def search_product(keyword):
     matches = []
@@ -89,7 +109,7 @@ def product_menu():
         elif option == "5":
             break
         elif option == "6":
-            delete_product
+            delete_product()
         else:
             print("Invalid")
 def delete_product():
@@ -104,6 +124,7 @@ def delete_product():
             if del_item == item["id"] or del_item == item["name"]:
                 found = True
                 products.remove(item)
+                save_products(products)
                 print("deleted")
                 break
         if found == False:
@@ -117,6 +138,7 @@ def add_cart(user):
             item["quantity"] += quantity
             return
     user["cart"].append(cart)
+    save_user(users)
 def remove_cart(id_cart, user):
     while True:
         found = False
@@ -126,10 +148,12 @@ def remove_cart(id_cart, user):
                 user["cart"].remove(cart)
         if found == False:
             break
+    save_user(users)
 def quantity_cart(itemcart):
     print(f"Current cart quantity is {itemcart['quantity']}")
     new_quantity = int(input("Enter new quantity: "))
     itemcart["quantity"] = new_quantity
+    save_user(users)
     print("Quantity cart updated!")
 def cart_system(user):
     menu_cart = ["1. Add to cart", "2. Remove from cart", "3. Change quantity"]
@@ -150,10 +174,10 @@ def cart_system(user):
             while True:
                 for item in user["cart"]:
                     print(item)
-                option = input("1. Remove", "2. Done")
+                option = input("1. Remove\n2. Done\n")
                 if option == "1":
                     id_cart = input("Choose id cart: ")
-                    remove_cart(id_cart)
+                    remove_cart(id_cart, user)
                 elif option == "2":
                     break
         elif cart_choice == "3":
@@ -196,6 +220,8 @@ def checkout(user):
     order = {"items": order_items, "total": total}
     user["history"].append(order)
     user["cart"].clear()
+    save_user(users)
+    save_products(products)
     return True
 def user_menu(user):
     user_menu = ["1. Search", "2. Cart system", "3. View cart", "4. Checkout", "5. Log out", "6. View history"]
